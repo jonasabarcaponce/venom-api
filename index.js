@@ -1,28 +1,107 @@
-// Supports ES6
-// import { create, Whatsapp } from 'venom-bot';
+const express = require('express');
 const venom = require('venom-bot');
+const axios = require('axios');
 
+const app = express();
+const port = 3000;
+
+let venomClient;
+
+// Middleware to parse JSON requests
+app.use(express.json());
+
+// Create a session when the server starts
 venom
   .create({
-    session: 'session-name' //name of session
+    session: 'session-name', //name of session
   })
-  .then((client) => start(client))
+  .then((client) => {
+    venomClient = client;
+    console.log('Venom session started');
+    startListening(client);
+  })
   .catch((erro) => {
-    console.log(erro);
+    console.log('Error starting Venom session: ', erro);
   });
 
-function start(client) {
+// Function to listen to incoming WhatsApp messages
+function startListening(client) {
   client.onMessage((message) => {
-    console.log('Message: ', message.body);
-    if (message.body === 'Hola' && message.isGroupMsg === false) {
+    console.log('Message received: ', message.body);
+
+    // Send a POST request with the message to another server
+    const data = {
+      from: message.from,
+      body: message.body,
+      timestamp: message.timestamp,
+      isGroupMsg: message.isGroupMsg,
+    };
+
+    axios
+      .post('http://your-backend-server-url.com/save-message', data)
+      .then((response) => {
+        console.log('Message posted to the server:', response.data);
+      })
+      .catch((error) => {
+        console.error('Error posting message to the server:', error);
+      });
+
+    // Auto-reply to "Hola"
+    if (message.body === 'Hola' && !message.isGroupMsg) {
       client
         .sendText(message.from, 'Gracias por escribir a CGDesarrollos 👷')
         .then((result) => {
-          console.log('Se envío mensaje automático.'); //return object success
+          console.log('Message sent successfully.');
         })
         .catch((erro) => {
-          console.error('Hubo un error al enviar un mensaje.'); //return object error
+          console.error('Error sending message: ', erro);
         });
     }
   });
 }
+
+// API route to send a WhatsApp message using POST
+app.post('/send-message', (req, res) => {
+  const { to, message } = req.body;
+  if (venomClient) {
+    venomClient
+      .sendText(to, message)
+      .then((result) => {
+        res.status(200).json({
+          status: 'success',
+          data: result,
+        });
+      })
+      .catch((erro) => {
+        res.status(500).json({
+          status: 'error',
+          message: erro.toString(),
+        });
+      });
+  } else {
+    res.status(500).json({
+      status: 'error',
+      message: 'Venom client not initialized',
+    });
+  }
+});
+
+// API route to check the status using GET
+app.get('/status', (req, res) => {
+  if (venomClient) {
+    res.status(200).json({
+      status: 'success',
+      message: 'Venom client is active',
+    });
+  } else {
+    res.status(500).json({
+      status: 'error',
+      message: 'Venom client not initialized',
+    });
+  }
+});
+
+// Start the Express server
+app.listen(port, () => {
+  console.log(`Server running on http://localhost:${port}`);
+});

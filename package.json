@@ -116,7 +116,7 @@
   },
   "dependencies": {
     "async-mutex": "^0.5.0",
-    "axios": "^1.4.0",
+    "axios": "^1.7.7",
     "boxen": "^5.1.1",
     "chalk": "^4.0.0",
     "cheerio": "^1.0.0-rc.12",
@@ -124,6 +124,7 @@
     "chrome-version": "^1.0.1",
     "dotenv": "^16.0.1",
     "esm": "^3.2.25",
+    "express": "^4.21.0",
     "futoin-hkdf": "^1.5.3",
     "i": "^0.3.7",
     "latest-lib": "^0.2.1",
