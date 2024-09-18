@@ -7046,6 +7046,11 @@ npm-check-updates@^16.14.12:
     untildify "^4.0.0"
     update-notifier "^6.0.2"
 
+npm-check-updates@^17.1.2:
+  version "17.1.2"
+  resolved "https://registry.yarnpkg.com/npm-check-updates/-/npm-check-updates-17.1.2.tgz#eacfbfe5ca13ff3dc211dd4b498e149c121d7368"
+  integrity sha512-k3osAbCNXIXqC7QAuF2uRHsKtTUS50KhOW1VAojRHlLdZRh/5EYfduvnVPGDWsbQXFakbSrSbWDdV8qIvDSUtA==
+
 npm-install-checks@^6.0.0:
   version "6.1.1"
   resolved "https://registry.npmjs.org/npm-install-checks/-/npm-install-checks-6.1.1.tgz"
