@@ -38,7 +38,7 @@ function startListening(client) {
     };
 
     axios
-      .post('http://your-backend-server-url.com/save-message', data)
+      .post('http://cgdesarrollos.test/save-message', data)
       .then((response) => {
         console.log('Message posted to the server:', response.data);
       })
@@ -63,25 +63,27 @@ function startListening(client) {
 // API route to send a WhatsApp message using POST
 app.post('/send-message', (req, res) => {
   const { to, message } = req.body;
+  console.log('Received status: ', req.body.status);
+  console.log('Received body: ', req.body);
   if (venomClient) {
     venomClient
       .sendText(to, message)
       .then((result) => {
         res.status(200).json({
           status: 'success',
-          data: result,
+          data: result
         });
       })
       .catch((erro) => {
         res.status(500).json({
           status: 'error',
-          message: erro.toString(),
+          message: erro.toString()
         });
       });
   } else {
     res.status(500).json({
       status: 'error',
-      message: 'Venom client not initialized',
+      message: 'Venom client not initialized'
     });
   }
 });
