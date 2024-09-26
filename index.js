@@ -38,7 +38,7 @@ function startListening(client) {
     };
 
     axios
-      .post('http://cgdesarrollos.mx/save-message', data)
+      .post('http://cgdesarrollos.test/save-message', data)
       .then((response) => {
         console.log('Message posted to the server:', response.data);
       })
