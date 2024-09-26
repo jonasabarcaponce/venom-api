@@ -14,7 +14,7 @@ jobs:
         node-version: '22'  # Specify the Node.js version you need
 
     - name: 📂 Instalar dependencias
-      run: npm install  # Installs dependencies (or use `npm ci` if you have a lockfile for CI purposes)
+      run: npm install --verbose  # Installs dependencies (or use `npm ci` if you have a lockfile for CI purposes)
 
     - name: 🛠️ Compilar proyecto
       run: npm run build  # Builds your project and creates the `dist` folder
